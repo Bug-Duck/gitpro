@@ -1,0 +1,7 @@
+{
+  "name": "gitpro",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
