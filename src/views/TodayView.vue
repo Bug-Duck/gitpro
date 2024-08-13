@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import RepoCard2 from '@/components/RepoCard2.vue';
 import NoticeIcon from '@/icons/NoticeIcon.vue';
 import SearchIcon from '@/icons/SearchIcon.vue';
 import { IonHeader, IonContent, IonPage, IonTitle, IonButton, IonItemSliding } from '@ionic/vue'
@@ -31,6 +32,9 @@ const currentTab = ref('Repo')
           'shadow-md': currentTab === item,
         }" @click="currentTab = item">{{ item }}</button>
       </div>
+      <Suspense>
+        <RepoCard2 owner="dromara" name="newcar"/>
+      </Suspense>
     </ion-content>
   </ion-page>
 </template>

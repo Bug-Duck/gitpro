@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IonTitle, IonHeader, IonContent, IonSearchbar, IonButton, IonIcon, IonPage } from '@ionic/vue'
-import RepoCard from '@/components/RepoCard.vue'
+import RepoCard from '@/components/RepoCard1.vue'
 import { arrowForward } from 'ionicons/icons';
 </script>
 

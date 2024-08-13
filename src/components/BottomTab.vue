@@ -5,6 +5,9 @@ import RepoIcon from '@/icons/RepoIcon.vue'
 import RepoIconSelected from '@/icons/RepoIconSelected.vue'
 import { IonTabs, IonTabBar, IonTabButton, IonRouterOutlet, IonIcon, IonLabel } from '@ionic/vue'
 import { useRoute } from 'vue-router'
+import DiscoverIcon from '@/icons/DiscoverIcon.vue'
+import ProfileIcon from '@/icons/ProfileIcon.vue'
+import ProfileIconSelected from '@/icons/ProfileIconSelected.vue'
 
 const route = useRoute()
 </script>
@@ -18,9 +21,9 @@ const route = useRoute()
         <TodayIconSelected v-if="route.path === '/today'"/>
       </ion-tab-button>
 
-      <ion-tab-button tab="radio" href="/radio">
-        <ion-icon />
-        <ion-label>Discover</ion-label>
+      <ion-tab-button tab="discover" href="/discover">
+        <DiscoverIcon v-if="route.path !== '/discover'"/>
+        <DiscoverIcon v-if="route.path === '/discover'"/>
       </ion-tab-button>
 
       <ion-tab-button tab="repo" href="/repo">
@@ -28,9 +31,9 @@ const route = useRoute()
         <RepoIconSelected v-if="route.path === '/repo'"/>
       </ion-tab-button>
 
-      <ion-tab-button tab="search" href="/search">
-        <ion-icon />
-        <ion-label>Profile</ion-label>
+      <ion-tab-button tab="profile" href="/profile">
+        <ProfileIcon v-if="route.path !== '/profile'"/>
+        <ProfileIconSelected v-if="route.path === '/profile'"/>
       </ion-tab-button>
     </ion-tab-bar>
   </ion-tabs>
