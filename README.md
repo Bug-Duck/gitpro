@@ -39,3 +39,8 @@ Developing...
 - [ ] Notices Page
 - [ ] Login
 - [ ] Sign up
+
+## Developer & Designer
+
+- [AcboxSky](https://github.com/sheepbox8646) Author, Programmer.
+- [Chirayu Intaratanoo](https://github.com/absolute-tk) Designer.
