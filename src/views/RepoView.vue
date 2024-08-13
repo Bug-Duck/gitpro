@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { IonTitle, IonHeader, IonContent, IonSearchbar, IonButton, IonIcon, IonPage } from '@ionic/vue'
 import RepoCard from '@/components/RepoCard1.vue'
-import { arrowForward } from 'ionicons/icons';
+import { arrowForward } from 'ionicons/icons'
+import NoticeIcon from '@/icons/NoticeIcon.vue'
+import SearchIcon from '@/icons/SearchIcon.vue'
 </script>
 
 <template>
   <ion-page>
-    <header class="mt-3 ml-3 flex flex-row">
-      <h1 class="text-3xl font-black">Repository</h1>
+    <header class="mt-3 ml-3 w-full">
+      <h1 class="text-3xl font-black float-left">Repository</h1>
+      <NoticeIcon class="float-right mt-7 mr-6" />
+      <SearchIcon class="float-right mt-7 mr-6" />
     </header>
     <ion-content>
       <div class="text-2xl pl-3 font-black mt-5">TRENDING NOW</div>
@@ -24,7 +28,7 @@ import { arrowForward } from 'ionicons/icons';
           <RepoCard owner="Bug-Duck" name="LLMVision"
             class="rotate-[5deg] translate-x-[80px] translate-y-[40px] absolute top-0 left-0 z-30" />
         </Suspense>
-        <div class="absolute mt-[500px] w-full">
+        <div class="absolute mt-[120%] w-full">
           <ion-button color="medium" expand="block" shape="round"
             class="flex w-[40%] self-baseline ml-[30%] font-black">
             <ion-icon :icon="arrowForward" slot="end"></ion-icon>

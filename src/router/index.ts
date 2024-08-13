@@ -20,6 +20,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/today',
     name: 'today',
     component: () => import('../views/TodayView.vue')
+  },
+  {
+    path: '/discover',
+    name: 'discover',
+    component: () => import('../views/DiscoverView.vue')
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('../views/ProfileView.vue')
   }
 ]
 

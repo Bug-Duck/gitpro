@@ -8,6 +8,7 @@ import { useRoute } from 'vue-router'
 import DiscoverIcon from '@/icons/DiscoverIcon.vue'
 import ProfileIcon from '@/icons/ProfileIcon.vue'
 import ProfileIconSelected from '@/icons/ProfileIconSelected.vue'
+import DiscoverIconSelected from '@/icons/DiscoverIconSelected.vue'
 
 const route = useRoute()
 </script>
@@ -23,7 +24,7 @@ const route = useRoute()
 
       <ion-tab-button tab="discover" href="/discover">
         <DiscoverIcon v-if="route.path !== '/discover'"/>
-        <DiscoverIcon v-if="route.path === '/discover'"/>
+        <DiscoverIconSelected v-if="route.path === '/discover'"/>
       </ion-tab-button>
 
       <ion-tab-button tab="repo" href="/repo">
