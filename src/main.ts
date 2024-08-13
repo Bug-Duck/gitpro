@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
+import './style.css'
 
 import { IonicVue } from '@ionic/vue';
 
@@ -35,7 +36,10 @@ import '@ionic/vue/css/palettes/dark.system.css';
 import './theme/variables.css';
 
 const app = createApp(App)
-  .use(IonicVue)
+  .use(IonicVue, {
+    mode: 'ios',
+    rippleEffect: false,
+  })
   .use(router);
 
 router.isReady().then(() => {

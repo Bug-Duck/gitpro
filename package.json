@@ -12,14 +12,21 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@capacitor/android": "6.1.2",
     "@capacitor/app": "6.0.1",
     "@capacitor/core": "6.1.2",
     "@capacitor/haptics": "6.0.1",
+    "@capacitor/ios": "6.1.2",
     "@capacitor/keyboard": "6.0.2",
     "@capacitor/status-bar": "6.0.1",
     "@ionic/vue": "^8.0.0",
     "@ionic/vue-router": "^8.0.0",
+    "@octokit/core": "^6.1.2",
+    "@octokit/rest": "^21.0.1",
+    "autoprefixer": "^10.4.20",
     "ionicons": "^7.0.0",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.9",
     "vue": "^3.3.0",
     "vue-router": "^4.2.0"
   },
