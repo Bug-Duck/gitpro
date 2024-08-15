@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import RepoCard2Box from '@/components/RepoCard2Box.vue';
+import Loader from '@/components/Loader.vue';
 import NoticeIcon from '@/icons/NoticeIcon.vue';
 import SearchIcon from '@/icons/SearchIcon.vue';
 import { IonHeader, IonContent, IonPage, IonTitle, IonButton, IonItemSliding } from '@ionic/vue'
@@ -34,6 +35,9 @@ const currentTab = ref('Repo')
       </div>
       <Suspense>
         <RepoCard2Box/>
+          <template #fallback>
+            <Loader/>
+          </template>
       </Suspense>
     </ion-content>
   </ion-page>
