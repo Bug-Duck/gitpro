@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import RepoCard2 from '@/components/RepoCard2.vue';
+import RepoCard2Box from '@/components/RepoCard2Box.vue';
 import NoticeIcon from '@/icons/NoticeIcon.vue';
 import SearchIcon from '@/icons/SearchIcon.vue';
 import { IonHeader, IonContent, IonPage, IonTitle, IonButton, IonItemSliding } from '@ionic/vue'
@@ -33,7 +33,7 @@ const currentTab = ref('Repo')
         }" @click="currentTab = item">{{ item }}</button>
       </div>
       <Suspense>
-        <RepoCard2 owner="dromara" name="newcar"/>
+        <RepoCard2Box/>
       </Suspense>
     </ion-content>
   </ion-page>
