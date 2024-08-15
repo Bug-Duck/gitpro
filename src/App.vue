@@ -1,7 +1,11 @@
 <template>
   <ion-app>
-    <ion-router-outlet v-if="route.path === '/init'"></ion-router-outlet>
-    <BottomTab v-if="route.path !== '/init'"></BottomTab>
+    <Suspense>
+      <ion-router-outlet v-if="route.path === '/init'"></ion-router-outlet>
+    </Suspense>
+    <Suspense>
+      <BottomTab v-if="route.path !== '/init'"></BottomTab>
+    </Suspense>
   </ion-app>
 </template>
 
