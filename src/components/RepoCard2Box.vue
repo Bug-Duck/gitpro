@@ -9,12 +9,13 @@ var card2Box: {
   owner: string,
   repo: string
 }[] = []
-const items = (await oc.request('GET /user/starred', {
+const resp = (await oc.request('GET /user/starred', {
   headers: {
     'Accept': 'application/vnd.github.v3.star+json',
     'X-GitHub-Api-Version': '2022-11-28'
   }
-})).data
+}))
+const items = resp.data
 items.forEach(function (e: any) {
   if (e.starred_at == undefined) {
     return;
