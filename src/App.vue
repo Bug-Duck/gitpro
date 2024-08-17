@@ -16,9 +16,12 @@ import { useRoute } from 'vue-router'
 import { provide } from 'vue';
 import { Octokit } from '@octokit/rest';
 
+//请将token存在src/tocken.ts
+import {token} from './token'
+
 const route = useRoute()
 
 provide('oc', new Octokit({
-  auth: ''
+  auth: token
 }))
 </script>

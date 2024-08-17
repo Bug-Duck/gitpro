@@ -35,9 +35,9 @@ const currentTab = ref('Repo')
       </div>
       <Suspense>
         <RepoCard2Box/>
-          <template #fallback>
-            <Loader/>
-          </template>
+        <template #fallback>
+          <Loader/>
+        </template>
       </Suspense>
     </ion-content>
   </ion-page>
