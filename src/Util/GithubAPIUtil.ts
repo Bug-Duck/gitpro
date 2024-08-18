@@ -1,5 +1,6 @@
 import { Octokit as OckitCore } from '@octokit/core';
 import { Octokit as OckitRest } from '@octokit/rest';
+import { language } from 'ionicons/icons';
 import { inject } from 'vue';
 
 const OcCore = inject('oc') as OckitCore;
@@ -60,8 +61,11 @@ class GithubReposFetcher {}
 class GithubAPIUtil {
   private getGithubStars: typeof GithubStarsFetcher;
   private getGithubRepos: typeof GithubReposFetcher;
-
+  LanguageColors: any;
   constructor() {
+    (async () => {
+      this.LanguageColors = await this.getLanguageColors();
+    })();
     this.getGithubStars = GithubStarsFetcher;
     this.getGithubRepos = GithubReposFetcher;
   }
@@ -87,13 +91,16 @@ class GithubAPIUtil {
     return maxKey;
   }
 
-  async getMainLanguage(owner: string, repo: string) {
-    const languages = await OcRest.repos.listLanguages({
-      owner,
-      repo
-    });
-    console.info('getMainLanguage ok');
-    const language = await this.findKeyWithMaxValue(languages.data) as string;
+  // async getMainLanguage(owner: string, repo: string) {
+  //   const languages = (await OcRest.rest.repos.listLanguages({
+  //     owner: owner,
+  //     repo: repo
+  //   })).data;
+  //   const language = await this.findKeyWithMaxValue(languages) as string;
+  //   return language
+  // }
+  getMainLanguage(languagelist:any) {
+    const language = this.findKeyWithMaxValue(languagelist) as string;
     return language
   }
 }

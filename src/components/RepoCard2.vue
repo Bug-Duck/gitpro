@@ -6,6 +6,7 @@ import { IonCard, IonCardContent, IonCardSubtitle, IonCardHeader, IonCardTitle }
 import { Octokit } from '@octokit/rest'
 import { inject, ref } from 'vue'
 import { GithubAPIUtilInstance } from '@/Util/GithubAPIUtil';
+import { language } from 'ionicons/icons';
 
 const oc = inject('oc') as Octokit
 const defaultColor = '#000'; // default color
@@ -43,13 +44,13 @@ const contributors = (await oc.rest.repos.listContributors({
   repo: props.name
 })).data
 
-console.log((await oc.rest.repos.listLanguages({
+const languageList = (await oc.rest.repos.listLanguages({
   owner: props.owner,
   repo: props.name
-})).data)
+})).data
 
-const colors = GithubAPIUtilInstance.getLanguageColors();
-const languageName = GithubAPIUtilInstance.getMainLanguage(props.owner,props.name)
+const colors = GithubAPIUtilInstance.LanguageColors
+const languageName = GithubAPIUtilInstance.getMainLanguage(languageList)
 
 let color: string | undefined;
 try {
@@ -76,7 +77,7 @@ const finalColor = color || defaultColor;
         <div class="flex flex-col float-left w-full">
           <div class="flex flex-row text-[rgba(60,60,67,0.60)] items-center">
             <span class="mr-1 w-[16px] h-[16px] rounded-full" :style="{
-              backgroundColor: color
+              backgroundColor: finalColor
             }"></span>
             {{ languageName }}
           </div>
