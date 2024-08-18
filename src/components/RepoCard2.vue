@@ -5,9 +5,10 @@ import UserIcon1 from '@/icons/user-icons/UserIcon1.vue';
 import { IonCard, IonCardContent, IonCardSubtitle, IonCardHeader, IonCardTitle } from '@ionic/vue'
 import { Octokit } from '@octokit/rest'
 import { inject, ref } from 'vue'
+import { GithubAPIUtilInstance } from '@/Util/GithubAPIUtil';
 
 const oc = inject('oc') as Octokit
-
+const defaultColor = '#000'; // default color
 const props = defineProps<{
   name: string
   owner: string
@@ -17,20 +18,6 @@ const stared = ref((await oc.rest.activity.checkRepoIsStarredByAuthenticatedUser
   owner: props.owner,
   repo: props.name,
 })).data)
-
-function findKeyWithMaxValue(obj: any) {
-  let maxKey = null;
-  let maxValue = -Infinity;
-
-  for (const key in obj) {
-    if (obj[key] > maxValue) {
-      maxValue = obj[key];
-      maxKey = key;
-    }
-  }
-
-  return maxKey;
-}
 
 async function starClicked() {
   if (!stared.value)
@@ -61,13 +48,16 @@ console.log((await oc.rest.repos.listLanguages({
   repo: props.name
 })).data)
 
-const response = await fetch('https://raw.githubusercontent.com/ozh/github-colors/master/colors.json');
-const colors = await response.json();
-const languageName = findKeyWithMaxValue((await oc.rest.repos.listLanguages({
-  owner: props.owner,
-  repo: props.name
-})).data) as string
-const color = colors[languageName].color
+const colors = GithubAPIUtilInstance.getLanguageColors();
+const languageName = GithubAPIUtilInstance.getMainLanguage(props.owner,props.name)
+
+let color: string | undefined;
+try {
+  color = colors[languageName]?.color;
+} catch (error) {
+  console.error('Error accessing color:', error);
+}
+const finalColor = color || defaultColor;
 </script>
 
 <template>
