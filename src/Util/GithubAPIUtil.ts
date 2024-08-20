@@ -1,10 +1,8 @@
-import { Octokit as OckitCore } from '@octokit/core';
-import { Octokit as OckitRest } from '@octokit/rest';
-import { language } from 'ionicons/icons';
-import { inject } from 'vue';
-
-const OcCore = inject('oc') as OckitCore;
-const OcRest = inject('oc') as OckitRest;
+import { Octokit } from '@octokit/rest';
+import { token } from '../token';
+const oc = new Octokit({
+  auth: token
+})
 
 class GithubHttpException {
   /**
@@ -21,7 +19,7 @@ class GithubStarsFetcher {
     this.exception = new GithubHttpException(0, '');
   }
 
-  async getStarList(): Promise<any[]> {
+  async getStarList(): Promise<{ owner: string, repo: string }[]> {
     const response = await this.getData();
     if (response.status === 200) {
       console.info('get GithubStars ok');
@@ -41,7 +39,7 @@ class GithubStarsFetcher {
   }
 
   async getData() {
-    const OcResp = await OcCore.request('GET /user/starred', {
+    const OcResp = await oc.request('GET /user/starred', {
       headers: {
         'Accept': 'application/vnd.github.v3.star+json',
         'X-GitHub-Api-Version': '2022-11-28'
@@ -58,16 +56,12 @@ class GithubStarsFetcher {
 
 class GithubReposFetcher {}
 
-class GithubAPIUtil {
-  private getGithubStars: typeof GithubStarsFetcher;
-  private getGithubRepos: typeof GithubReposFetcher;
+class GetMainLanguageColor{
   LanguageColors: any;
   constructor() {
     (async () => {
       this.LanguageColors = await this.getLanguageColors();
     })();
-    this.getGithubStars = GithubStarsFetcher;
-    this.getGithubRepos = GithubReposFetcher;
   }
 
   async getLanguageColors() {
@@ -91,18 +85,63 @@ class GithubAPIUtil {
     return maxKey;
   }
 
+  async getLanguageList(owner: string, repo: string){
+    return (await oc.rest.repos.listLanguages({
+      owner: owner,
+      repo: repo
+    })).data
+  }
+
+  getMainLanguage(languagelist:{[key: string]: number}) {
+    const language = this.findKeyWithMaxValue(languagelist) as string;
+    return language
+  }
+
+  getMainLanguageColor(languageName: string){
+    const defaultColor = '#000000';
+    const colors = this.LanguageColors
+
+    let color: string | undefined;
+    try {
+      color = colors[languageName]?.color;
+    } catch (error) {
+      console.error('Error accessing color:', error);
+    }
+    const finalColor = color || defaultColor;
+    return finalColor;
+  }
+}
+
+class GithubAPIUtil {
+  private getGithubStars: GithubStarsFetcher;
+  private getGithubRepos: GithubReposFetcher;
+  private getMianLanguageColor: GetMainLanguageColor;
+  constructor() {
+    this.getMianLanguageColor = new GetMainLanguageColor;
+    this.getGithubStars = new GithubStarsFetcher;
+    this.getGithubRepos = new GithubReposFetcher;
+  }
+
+  async getStars() {
+    return await this.getGithubStars.getStarList();
+  }
+
+  async getMianLanguage(owner: string, repo: string){
+    return this.getMianLanguageColor.getMainLanguage(await this.getMianLanguageColor.getLanguageList(owner, repo));
+  }
+
+  getMainLanguageColor(languageName: string){
+    return this.getMianLanguageColor.getMainLanguageColor(languageName);
+  }
+
   // async getMainLanguage(owner: string, repo: string) {
-  //   const languages = (await OcRest.rest.repos.listLanguages({
+  //   const languages = (await oc.rest.repos.listLanguages({
   //     owner: owner,
   //     repo: repo
   //   })).data;
   //   const language = await this.findKeyWithMaxValue(languages) as string;
   //   return language
   // }
-  getMainLanguage(languagelist:any) {
-    const language = this.findKeyWithMaxValue(languagelist) as string;
-    return language
-  }
 }
 
 export const GithubAPIUtilInstance = new GithubAPIUtil();

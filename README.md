@@ -43,4 +43,5 @@ Developing...
 ## Developer & Designer
 
 - [AcboxSky](https://github.com/sheepbox8646) Author, Programmer.
+- [xs10l3](https://github.com/xs10l3) Programmer.
 - [Chirayu Intaratanoo](https://github.com/absolute-tk) Designer.
