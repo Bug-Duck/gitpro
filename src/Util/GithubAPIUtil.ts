@@ -112,14 +112,57 @@ class GetMainLanguageColor{
   }
 }
 
+class GithubStar{
+  async isStarted(owner: string, repo: string){
+    return (await oc.rest.activity.checkRepoIsStarredByAuthenticatedUser({
+      owner: owner,
+      repo: repo,
+    })).data
+  }
+
+  async StarRepo(owner: string, repo: string){
+    return (await oc.rest.activity.starRepoForAuthenticatedUser({
+      owner: owner,
+      repo: repo,
+    }))
+  }
+
+  async unStarRepo(owner: string, repo: string){
+    return (await oc.rest.activity.unstarRepoForAuthenticatedUser({
+      owner: owner,
+      repo: repo,
+    }))
+  }
+}
+
+class GithubRepo{
+  async getContributors(owner: string, repo: string){
+    return (await oc.rest.repos.listContributors({
+      owner: owner,
+      repo: repo
+    })).data
+  }
+
+  async getRepoData(owner: string, repo: string){
+    return (await oc.rest.repos.get({
+      owner: owner,
+      repo: repo
+    })).data
+  }
+}
+
 class GithubAPIUtil {
   private getGithubStars: GithubStarsFetcher;
   private getGithubRepos: GithubReposFetcher;
   private getMianLanguageColor: GetMainLanguageColor;
+  private githubStar: GithubStar;
+  private githubRepo: GithubRepo;
   constructor() {
     this.getMianLanguageColor = new GetMainLanguageColor;
     this.getGithubStars = new GithubStarsFetcher;
     this.getGithubRepos = new GithubReposFetcher;
+    this.githubStar = new GithubStar;
+    this.githubRepo = new GithubRepo;
   }
 
   async getStars() {
@@ -134,6 +177,25 @@ class GithubAPIUtil {
     return this.getMianLanguageColor.getMainLanguageColor(languageName);
   }
 
+  isStarted(owner: string, repo: string){
+    return this.githubStar.isStarted(owner, repo);
+  }
+
+  async StarRepo(owner: string, repo: string){
+    return this.githubStar.StarRepo(owner, repo);
+  }
+
+  async unStarRepo(owner: string, repo: string){
+    return this.githubStar.unStarRepo(owner, repo);
+  }
+
+  async getContributors(owner: string, repo: string){
+    return this.githubRepo.getContributors(owner, repo);
+  }
+
+  async getRepoData(owner: string, repo: string){
+    return this.githubRepo.getRepoData(owner, repo);
+  }
   // async getMainLanguage(owner: string, repo: string) {
   //   const languages = (await oc.rest.repos.listLanguages({
   //     owner: owner,

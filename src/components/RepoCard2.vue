@@ -3,44 +3,27 @@ import StarLarge from '@/icons/star-icons/StarLarge.vue';
 import StarMiddle from '@/icons/star-icons/StarMiddle.vue';
 import UserIcon1 from '@/icons/user-icons/UserIcon1.vue';
 import { IonCard, IonCardContent, IonCardSubtitle, IonCardHeader, IonCardTitle } from '@ionic/vue'
-import { Octokit } from '@octokit/rest'
 import { inject, ref } from 'vue'
 import { GithubAPIUtilInstance } from '@/Util/GithubAPIUtil';
 
-const oc = inject('oc') as Octokit
 const props = defineProps<{
   name: string
   owner: string
 }>()
 
-const stared = ref((await oc.rest.activity.checkRepoIsStarredByAuthenticatedUser({
-  owner: props.owner,
-  repo: props.name,
-})).data)
+const stared = ref(await GithubAPIUtilInstance.isStarted(props.owner, props.name))
 
 async function starClicked() {
   if (!stared.value)
-    await oc.rest.activity.starRepoForAuthenticatedUser({
-      owner: props.owner,
-      repo: props.name
-    })
+    await GithubAPIUtilInstance.StarRepo(props.owner, props.name)
   else
-    await oc.rest.activity.unstarRepoForAuthenticatedUser({
-      owner: props.owner,
-      repo: props.name
-    })
+    await GithubAPIUtilInstance.unStarRepo(props.owner, props.name)
   stared.value = !stared.value as never
 }
 
-const { data } = await oc.rest.repos.get({
-  owner: props.owner,
-  repo: props.name
-})
+const data = await GithubAPIUtilInstance.getRepoData(props.owner, props.name)
 
-const contributors = (await oc.rest.repos.listContributors({
-  owner: props.owner,
-  repo: props.name
-})).data
+const contributors = await GithubAPIUtilInstance.getContributors(props.owner, props.name)
 
 const languageName = await GithubAPIUtilInstance.getMianLanguage(props.owner,props.name)
 const finalColor = GithubAPIUtilInstance.getMainLanguageColor(languageName)

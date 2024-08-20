@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { GithubAPIUtilInstance } from '@/Util/GithubAPIUtil';
 import { IonCard, IonCardContent, IonCardSubtitle, IonCardHeader, IonCardTitle } from '@ionic/vue'
 import { Octokit } from '@octokit/rest'
 import { inject } from 'vue'
@@ -10,10 +11,7 @@ const props = defineProps<{
   owner: string
 }>()
 
-const { data } = await oc.rest.repos.get({
-  owner: props.owner,
-  repo: props.name
-})
+const data =await GithubAPIUtilInstance.getRepoData(props.owner, props.name)
 
 const graphql = oc.graphql.defaults({})
 const result = await graphql(`{
