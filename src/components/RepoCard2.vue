@@ -5,9 +5,11 @@ import UserIcon1 from '@/icons/user-icons/UserIcon1.vue';
 import { IonCard, IonCardContent, IonCardSubtitle, IonCardHeader, IonCardTitle } from '@ionic/vue'
 import { Octokit } from '@octokit/rest'
 import { inject, ref } from 'vue'
+import { GithubAPIUtilInstance } from '@/Util/GithubAPIUtil';
+import { language } from 'ionicons/icons';
 
 const oc = inject('oc') as Octokit
-
+const defaultColor = '#000'; // default color
 const props = defineProps<{
   name: string
   owner: string
@@ -17,20 +19,6 @@ const stared = ref((await oc.rest.activity.checkRepoIsStarredByAuthenticatedUser
   owner: props.owner,
   repo: props.name,
 })).data)
-
-function findKeyWithMaxValue(obj: any) {
-  let maxKey = null;
-  let maxValue = -Infinity;
-
-  for (const key in obj) {
-    if (obj[key] > maxValue) {
-      maxValue = obj[key];
-      maxKey = key;
-    }
-  }
-
-  return maxKey;
-}
 
 async function starClicked() {
   if (!stared.value)
@@ -56,18 +44,21 @@ const contributors = (await oc.rest.repos.listContributors({
   repo: props.name
 })).data
 
-console.log((await oc.rest.repos.listLanguages({
+const languageList = (await oc.rest.repos.listLanguages({
   owner: props.owner,
   repo: props.name
-})).data)
+})).data
 
-const response = await fetch('https://raw.githubusercontent.com/ozh/github-colors/master/colors.json');
-const colors = await response.json();
-const languageName = findKeyWithMaxValue((await oc.rest.repos.listLanguages({
-  owner: props.owner,
-  repo: props.name
-})).data) as string
-const color = colors[languageName].color
+const colors = GithubAPIUtilInstance.LanguageColors
+const languageName = GithubAPIUtilInstance.getMainLanguage(languageList)
+
+let color: string | undefined;
+try {
+  color = colors[languageName]?.color;
+} catch (error) {
+  console.error('Error accessing color:', error);
+}
+const finalColor = color || defaultColor;
 </script>
 
 <template>
@@ -86,7 +77,7 @@ const color = colors[languageName].color
         <div class="flex flex-col float-left w-full">
           <div class="flex flex-row text-[rgba(60,60,67,0.60)] items-center">
             <span class="mr-1 w-[16px] h-[16px] rounded-full" :style="{
-              backgroundColor: color
+              backgroundColor: finalColor
             }"></span>
             {{ languageName }}
           </div>

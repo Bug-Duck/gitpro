@@ -23,7 +23,7 @@ items.forEach(function (e: any) {
   let nowTime = Date.now();
   let dataTime = new Date(e.starred_at).getTime()
   const timeDiff = nowTime - dataTime;
-  if (timeDiff <= 24 * 60 * 60 * 1000) {
+  if (timeDiff <= 30 * 24 * 60 * 60 * 1000) {
     // 报错是正常的
     let tmp = e.repo.full_name.split("/");
     card2Box.push({
