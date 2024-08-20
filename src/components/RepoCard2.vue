@@ -6,8 +6,10 @@ import { IonCard, IonCardContent, IonCardSubtitle, IonCardHeader, IonCardTitle }
 import { Octokit } from '@octokit/rest'
 import { inject, ref } from 'vue'
 import { GithubAPIUtilInstance } from '@/Util/GithubAPIUtil';
+import { language } from 'ionicons/icons';
 
 const oc = inject('oc') as Octokit
+const defaultColor = '#000'; // default color
 const props = defineProps<{
   name: string
   owner: string
@@ -42,8 +44,21 @@ const contributors = (await oc.rest.repos.listContributors({
   repo: props.name
 })).data
 
-const languageName = await GithubAPIUtilInstance.getMianLanguage(props.owner,props.name)
-const finalColor = GithubAPIUtilInstance.getMainLanguageColor(languageName)
+const languageList = (await oc.rest.repos.listLanguages({
+  owner: props.owner,
+  repo: props.name
+})).data
+
+const colors = GithubAPIUtilInstance.LanguageColors
+const languageName = GithubAPIUtilInstance.getMainLanguage(languageList)
+
+let color: string | undefined;
+try {
+  color = colors[languageName]?.color;
+} catch (error) {
+  console.error('Error accessing color:', error);
+}
+const finalColor = color || defaultColor;
 </script>
 
 <template>
