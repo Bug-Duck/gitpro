@@ -20,7 +20,7 @@
   width: 2rem;
   height: 2rem;
   /* 可替换主题色 */
-  background: rgba(0, 0, 0, .07);
+  background: rgba(255, 100, 0, 0.07);
   border-radius: 50%;
   box-shadow: 0 0 .5rem hsla(0, 0%, 100%, .2)
 }
