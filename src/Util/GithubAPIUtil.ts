@@ -14,11 +14,6 @@ class GithubHttpException {
 }
 
 class GithubStarsFetcher {
-  private exception: GithubHttpException;
-  constructor() {
-    this.exception = new GithubHttpException(0, '');
-  }
-
   async getStarList(): Promise<{ owner: string, repo: string }[]> {
     const response = await this.getData();
     if (response.status === 200) {
@@ -48,13 +43,43 @@ class GithubStarsFetcher {
     return {
       data: OcResp.data,
       status: OcResp.status,
-      headers: OcResp.headers,
-      url: OcResp.url
     };
   }
 }
 
-class GithubReposFetcher {}
+class GithubReposFetcher {
+  async getRepos(): Promise<{ owner: string, repo: string }[]> {
+    const response = await this.getData();
+    if (response.status === 200) {
+      console.info('get GithubRepos ok');
+      const items = response.data;
+      const recentRepos = items.filter((item: any)=>{
+        return item.fork === false
+        // return true
+      }).map((item: any) => {
+        const [owner, repo] = item.full_name.split('/');
+        return { owner, repo };
+      });
+      return recentRepos;
+    }else {
+      throw new GithubHttpException(response.status, 'Failed to fetch stars');
+    }
+  }
+  
+  async getData() {
+    const OcResp = await oc.request('GET /user/repos', {
+      headers: {
+        'Accept': 'application/vnd.github.v3.star+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'authorization': `${token}`
+      }
+    });
+    return {
+      data: OcResp.data,
+      status: OcResp.status,
+    }
+  }
+}
 
 class GetMainLanguageColor{
   LanguageColors: any;
@@ -167,6 +192,10 @@ class GithubAPIUtil {
 
   async getStars() {
     return await this.getGithubStars.getStarList();
+  }
+
+  async getRepos() {
+    return await this.getGithubRepos.getRepos();
   }
 
   async getMianLanguage(owner: string, repo: string){
