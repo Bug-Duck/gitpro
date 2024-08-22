@@ -174,6 +174,26 @@ class GithubRepo{
       repo: repo
     })).data
   }
+
+  async ListBranches(owner: string, repo: string){
+    const OcResp = await oc.request(`GET /repos/${owner}/${repo}/branches`, {
+      headers: {
+        'Accept': 'application/vnd.github.v3.star+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    });
+    return {
+      data: OcResp.data,
+      status: OcResp.status,
+    };
+  }
+
+  BranchesCount(owner: string, repo: string){
+    return (async () => {
+      const branches = await this.ListBranches(owner, repo);
+      return branches.data.length;
+    })();
+  }
 }
 
 class GithubAPIUtil {
@@ -224,6 +244,21 @@ class GithubAPIUtil {
 
   async getRepoData(owner: string, repo: string){
     return this.githubRepo.getRepoData(owner, repo);
+  }
+
+  numberProcessing(number: number){
+    switch (true) {
+      case number < 1000:
+        return number;
+      case number < 1000000:
+        return (number / 1000).toFixed(1) + 'K';
+      default:
+        return (number / 1000000).toFixed(1) + 'M';
+    }
+  }
+
+  async BranchesCount(owner: string, repo: string){
+    return this.githubRepo.BranchesCount(owner, repo);
   }
   // async getMainLanguage(owner: string, repo: string) {
   //   const languages = (await oc.rest.repos.listLanguages({
