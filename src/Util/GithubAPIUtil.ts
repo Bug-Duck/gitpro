@@ -188,9 +188,29 @@ class GithubRepo{
     };
   }
 
+  async ListTags(owner: string, repo: string){
+    const OcResp = await oc.request(`GET /repos/${owner}/${repo}/git/refs/tags`, {
+      headers: {
+        'Accept': 'application/vnd.github.v3.star+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    });
+    return {
+      data: OcResp.data,
+      status: OcResp.status,
+    };
+  }
+
   BranchesCount(owner: string, repo: string){
     return (async () => {
       const branches = await this.ListBranches(owner, repo);
+      return branches.data.length;
+    })();
+  }
+
+  tagsCount(owner: string, repo: string){
+    return (async () => {
+      const branches = await this.ListTags(owner, repo);
       return branches.data.length;
     })();
   }
@@ -259,6 +279,10 @@ class GithubAPIUtil {
 
   async BranchesCount(owner: string, repo: string){
     return this.githubRepo.BranchesCount(owner, repo);
+  }
+
+  async tagsCount(owner: string, repo: string){
+    return this.githubRepo.tagsCount(owner, repo);
   }
   // async getMainLanguage(owner: string, repo: string) {
   //   const languages = (await oc.rest.repos.listLanguages({
