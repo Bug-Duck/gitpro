@@ -3,6 +3,8 @@ import { Octokit } from '@octokit/rest'
 import { inject, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router';
+import NoticeIcon from '@/icons/NoticeIcon.vue';
+import SearchIcon from '@/icons/SearchIcon.vue';
 import { IonPage, IonCard, IonCardContent, IonContent } from '@ionic/vue';
 import { GithubAPIUtilInstance } from '@/Util/GithubAPIUtil';
 
@@ -16,6 +18,7 @@ const { data } = await oc.rest.repos.get({ owner: route.params.owner as string, 
 const languageName = await GithubAPIUtilInstance.getMianLanguage(route.params.owner as string, route.params.name as string)
 const finalColor = GithubAPIUtilInstance.getMainLanguageColor(languageName)
 const branchesCount = await GithubAPIUtilInstance.BranchesCount(route.params.owner as string, route.params.name as string)
+const tagsCount = await GithubAPIUtilInstance.tagsCount(route.params.owner as string, route.params.name as string)
 console.log(route.params.owner as string, route.params.name as string)
 const stared = ref(await GithubAPIUtilInstance.isStarted(route.params.owner as string, route.params.name as string))
 async function starClicked() {
@@ -25,6 +28,13 @@ async function starClicked() {
     await GithubAPIUtilInstance.unStarRepo(route.params.owner as string, route.params.name as string)
   stared.value = !stared.value as never
 }
+function ActivityStatus() {
+  if (data.archived == false)
+    return "Active"
+  else
+    return "Archived"
+}
+const activityStatus = ActivityStatus()
 </script>
 
 <template>
@@ -46,7 +56,8 @@ async function starClicked() {
               data.owner.login}}/</div>
             <div class="text-[24px] font-black dark:text-[#cccccc] items-center mt-0">{{ data.name }}</div>
           </div>
-          <div class="flex flex-row "></div>
+          <NoticeIcon class="float-right mt-7 mr-6 fill-black dark:fill-[#cccccc]"/>
+          <SearchIcon class="float-right mt-7 mr-6"/>
           <!-- <StarLarge :clicked='stared' @click="starClicked()" /> -->
         </div>
       </div>
@@ -92,12 +103,12 @@ async function starClicked() {
                 <div class="">
                   <div
                     class="text-[15px] text-[rgba(60,60,67,0.60)] dark:text-[#cccccc] font-black pb-0 mb-0 items-center">
-                    {{ GithubAPIUtilInstance.numberProcessing(data.stargazers_count) }} stars</div>
+                    {{ GithubAPIUtilInstance.numberProcessing(tagsCount) }} Tags</div>
                 </div>
                 <div class="">
                   <div
                     class="text-[15px] text-[rgba(60,60,67,0.60)] dark:text-[#cccccc] font-black pb-0 mb-0 items-center">
-                    {{ GithubAPIUtilInstance.numberProcessing(data.watchers_count) }} watching</div>
+                   {{ activityStatus }} </div>
                 </div>
               </div>
             </div>
