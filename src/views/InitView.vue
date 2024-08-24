@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import GitProLogo from '@/icons/GitProLogo.vue';
 import InitBackground from '@/icons/InitBackground.vue';
+import router from '@/router';
 import { IonButton, IonIcon, IonInput, IonPage } from '@ionic/vue'
 import { logoGithub } from 'ionicons/icons'
 import { ref } from 'vue';
@@ -22,6 +23,7 @@ function click() {
       <div class="text-center mb-8">
         <h1 class="text-6xl font-black">Welcome to GitPro</h1>
         <h1 class="text-3xl font-black text-gray-500">Your Git, Your Way.</h1>
+        <button @click="router.push('/today')">jump</button>
       </div>
 
       <ion-button expand="block" class="w-full max-w-md mx-auto next" @click="click()" v-if="!next">
